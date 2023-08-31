@@ -52,15 +52,15 @@ router.post("/categories/save", (request, response) => {
     }
 })
 
-router.post("/categories/delete", (request, response) => {
+router.post("/categories/delete", async (request, response) => {
     var id = request.body.id
 
-    const relatedArticles = Article.findOne({
+    const relatedArticles = await Article.findOne({
         where: {
             categoryId: id
         }
     });
-
+    console.log(relatedArticles)
     if (id) {
         if (!relatedArticles) {
             Category.destroy({
