@@ -18,6 +18,25 @@ router.get("/admin/articles/new", (request, response) => {
     })
 })
 
+router.get("/admin/article/edit/:id", (request, response) => {
+    var id = request.params.id
+    if (isNaN(id)) {
+        response.render("/admin/articles")
+    }
+    CategoryModel.findAll().then((categories) => {
+        Article.findByPk(id).then((article) => {
+            if (article != undefined ) {
+                response.render("admin/articles/edit", { article: article, categories: categories})
+            }else{
+                response.redirect("admin/articles")
+            }
+        }).catch((err) => {
+            response.redirect("admin/articles")
+        })
+
+    })
+})
+
 router.post("/articles/save", (request, response) => {
     var title = request.body.title
     var body = request.body.body
@@ -30,6 +49,26 @@ router.post("/articles/save", (request, response) => {
         categoryId: category
     }).then(() => {
         response.redirect("/admin/articles")
+    })
+})
+
+router.post("/article/update", (request, response) => {
+    var id = request.body.id
+    var title = request.body.title
+    var body = request.body.body
+    var category = request.body.category
+
+    Article.update({
+        title: title,
+        body: body,
+        categoryId: category
+    }, {
+        where: {
+            id: id
+        }
+    }).then(() => {
+        response.redirect("/admin/articles")
+        console.log("editado");
     })
 })
 

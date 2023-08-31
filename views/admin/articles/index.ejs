@@ -27,6 +27,8 @@
                     <td><%= art.title %></td>
                     <td><%= art.category.title %></td>
                     <td>
+                        <a href="/admin/article/edit/<%= art.id %>" class="btn btn-warning ">Editar</a>
+
                         <form method="POST" action="/articles/delete" class="d-inline" onsubmit="confirmarExclusao(event, this)">
                             <input name="id" type="hidden" value="<%= art.id %>" >
                             <button type="submit" class="btn btn-danger">Excluir</button>
