@@ -2,15 +2,20 @@ const express = require("express")
 const router = express.Router()
 const Category = require("./Category")
 const slugify = require("slugify")
+const Article = require("../articles/Article")
 
 var msg = null
+var msgErr = null
 
 router.get("/admin/categories", (request, response) => {
     Category.findAll().then((categories) =>{
         response.render("admin/categories/index", {
             categories: categories,
-            msg: msg })
+            msg: msg,
+            msgErr: msgErr
+         })
         msg = null
+        msgErr = null
     })
 })
 
@@ -49,15 +54,27 @@ router.post("/categories/save", (request, response) => {
 
 router.post("/categories/delete", (request, response) => {
     var id = request.body.id
+
+    const relatedArticles = Article.findOne({
+        where: {
+            categoryId: id
+        }
+    });
+
     if (id) {
-        Category.destroy({
-            where: {
-                id: id
-            }
-        }).then(() => {
+        if (!relatedArticles) {
+            Category.destroy({
+                where: {
+                    id: id
+                }
+            }).then(() => {
+                response.redirect("/admin/categories")
+                msg = "Excluido com sucesso"
+            })
+        }else{
+            msgErr = "Categoria não pode ser removida pois existe um ou mais artigos relacionados a ela"
             response.redirect("/admin/categories")
-            msg = "Excluido com sucesso"
-        })
+        }
     }else{
         response.send("erro ao excluir categoria")
     }

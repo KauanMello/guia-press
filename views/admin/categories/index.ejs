@@ -1,10 +1,15 @@
 <%- include("../../partials/header.ejs") %>
 <div class="container">
 
-    <% if(msg != null) {%>
+    <% if(msg != null) { %>
         <br>
         <div class="alert alert-success" role="alert">
             <%= msg %>
+        </div>
+    <% } else if(msgErr != null) { %>
+        <br>
+        <div class="alert alert-danger" role="alert">
+            <%= msgErr %>
         </div>
     <% }%>
     <br>
