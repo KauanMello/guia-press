@@ -1,0 +1,51 @@
+<%- include("../../partials/header.ejs") %>
+<div class="container">
+
+    <br>
+    <div>
+        <h2>Artigos </h2>
+        <a href="/admin/articles/new" class="btn btn-success">
+            Nova
+        </a>
+    </div>
+    <br>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>Título</th>
+                <th>Categoria</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% articles.forEach((art) => { %>
+                <tr>
+                    <td><%= art.id %></td>
+                    <td><%= art.title %></td>
+                    <td><%= art.category.title %></td>
+                    <td>
+                        <form method="POST" action="/articles/delete" class="d-inline" onsubmit="confirmarExclusao(event, this)">
+                            <input name="id" type="hidden" value="<%= art.id %>" >
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+           <% })%>
+        </tbody>
+    </table>
+
+</div>
+
+<%- include("../../partials/footer.ejs") %>
+<script>
+    function confirmarExclusao(event, form){
+        event.preventDefault()
+        var isOk = confirm("Tem certeza que deseja excluir o artigo selecionada?")
+        if(isOk){
+            form.submit()
+        }
+    }
+</script>
