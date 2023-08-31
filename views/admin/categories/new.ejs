@@ -1,0 +1,25 @@
+<%- include('../../partials/header.ejs') %>
+<div class="container">
+    <br>
+    <div class="card">
+
+        <div class="card-header">
+            <h2>Cadastro de categorias</h2>
+        </div>
+
+        <div class="card-body">
+            <form method="POST" action="/categories/save">
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Nome: </span>
+                    <input type="text" class="form-control" placeholder="Digite o nome da categoria" aria-label="Username" aria-describedby="addon-wrapping" name="title">
+                </div>
+
+                <br>
+                <button class="btn btn-sm btn-success">Cadastrar</button>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+<%- include('../../partials/footer.ejs') %>

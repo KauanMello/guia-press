@@ -1,0 +1,64 @@
+<%- include("../../partials/header.ejs") %>
+<div class="container">
+
+    <% if(msg != null) {%>
+        <br>
+        <div class="alert alert-success" role="alert">
+            <%= msg %>
+        </div>
+    <% }%>
+    <br>
+    <div>
+        <h2>Categorias </h2>
+        <a href="/admin/categories/new" class="btn btn-success">
+            Nova
+        </a>
+    </div>
+    <br>
+
+    <% if(categories.length > 0) {%>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Título</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% categories.forEach((category) => { %>
+                    <tr>
+                        <td><%= category.id %></td>
+                        <td><%= category.title %></td>
+
+                        <td>
+                            <a href="/admin/categories/edit/<%= category.id %>" class="btn btn-warning ">Editar</a>
+
+                            <form method="POST" action="/categories/delete" class="d-inline" onsubmit="confirmarExclusao(event, this)">
+                                <input name="id" type="hidden" value="<%= category.id %>" >
+                                <button type="submit" class="btn btn-danger">Excluir</button>
+                            </form>
+                        </td>
+
+                    </tr>
+                <% })%>
+
+            </tbody>
+
+        </table>
+    <% } %>
+
+
+</div>
+
+<%- include("../../partials/footer.ejs") %>
+<script>
+    function confirmarExclusao(event, form){
+        event.preventDefault()
+        var isOk = confirm("Tem certeza que deseja excluir a categoria selecionada?")
+        if(isOk){
+            form.submit()
+        }
+    }
+</script>
