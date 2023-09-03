@@ -8,12 +8,15 @@ var msg = null
 var msgErr = null
 
 router.get("/admin/categories", (request, response) => {
-    Category.findAll().then((categories) =>{
-        response.render("admin/categories/index", {
-            categories: categories,
-            msg: msg,
-            msgErr: msgErr
-         })
+    Category.findAll({limit: 5}).then((categories) =>{
+        Category.count().then((count)=> {
+            response.render("admin/categories/index", {
+                categories: categories,
+                msg: msg,
+                msgErr: msgErr,
+                count: count
+            })
+        })
         msg = null
         msgErr = null
     })
@@ -95,6 +98,40 @@ router.post("/categories/update", (request, response) => {
         msg = "Alterado com sucesso"
     })
 })
+
+
+router.get("/categories/page/:num", (request, response) => {
+    var page = request.params.num
+    var offset
+    if (isNaN(page) || page == 1) {
+        offset = 0
+    } else {
+        offset = parseInt(page - 1) * 5
+    }
+
+    Category.findAndCountAll({
+        limit: 5,
+        offset: offset
+    }).then((categories) => {
+
+        var next = true;
+        if (offset + 5 >= categories.count) {
+            next = false
+        }
+
+        var result = {
+            page: parseInt(page),
+            next: next,
+            categories: categories
+        }
+
+        response.render("admin/categories/page", {result: result, categories: categories})
+    })
+
+
+
+})
+
 
 module.exports = router
 
