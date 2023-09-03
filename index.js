@@ -25,6 +25,9 @@ app.use("/", categoriesController)
 const articlesController = require("./articles/ArticlesController")
 app.use("/", articlesController)
 
+const usersController = require("./users/UsersController")
+app.use("/", usersController)
+
 
 app.get("/", (req, response) => {
     Article.findAll({limit: 5}).then((articles) => {
