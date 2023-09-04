@@ -1,23 +1,21 @@
-<%- include("../../partials/header.ejs") %>
+<%- include("../../partials/loginHeader.ejs") %>
 
 <div class="container">
-    <div class="card mt-4">
+    <div class="card mt-5">
         <div class="card-header">
-            Criação de usuários
+            Login
         </div>
 
         <div class="card-body">
-            <form action="/users/create" method="POST">
+            <form action="/authenticate" method="POST">
                 <input type="email" name="email" class="form-control" placeholder="Digite seu email" required="true">
                 <br>
                 <input type="password" name="password" class="form-control" placeholder="Digite sua senha" required="true">
-                <button class="btn btn-success">Salvar</button>
+                <br>
+                <button class="btn btn-success" type="submit">Login</button>
             </form>
-
         </div>
     </div>
 </div>
 
-
 <%- include("../../partials/footer.ejs") %>
-
