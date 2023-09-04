@@ -90,4 +90,33 @@ router.post("/articles/delete", (request, response) => {
     }
 })
 
+router.get("/articles/page/:num", (request, response) => {
+    var page = request.params.num
+    var offset
+    if (isNaN(page) || page == 1) {
+        offset = 0
+    } else {
+        offset = parseInt(page - 1) * 5
+    }
+
+    Article.findAndCountAll({
+        limit: 5,
+        offset: offset
+    }).then((articles) => {
+
+        var next = true;
+        if (offset + 5 >= articles.count) {
+            next = false
+        }
+
+        var result = {
+            page: parseInt(page),
+            next: next,
+            articles: articles
+        }
+
+        response.render("admin/articles/page", {result: result, articles: articles})
+    })
+})
+
 module.exports = router
