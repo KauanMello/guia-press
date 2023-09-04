@@ -1,11 +1,13 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const session = require("express-session")
 const connection = require("./database/dao");
-
 
 const Article = require("./articles/Article")
 const Category = require("./categories/Category")
+const User =require("./users/User")
+
 
 app.set('view engine', 'ejs');
 
@@ -14,6 +16,13 @@ connection.authenticate().then(() => {
 }).catch((error) => {
     console.log(error)
 })
+
+app.use(session({
+    secret: "palavraaleatoria",
+    cookie: {
+        maxAge: 30000000
+    }
+}))
 
 app.use(bodyParser.urlencoded({extended: false}));
 
