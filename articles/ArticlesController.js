@@ -3,27 +3,26 @@ const router = express.Router()
 const slugify = require("slugify")
 const Article = require("./Article")
 const CategoryModel = require("../categories/Category")
+const adminAuth = require("../middlewares/adminAuth")
 
-router.get("/admin/articles", (request, response) => {
+router.get("/admin/articles", adminAuth, (request, response) => {
     Article.findAll({
-        include: [{model: CategoryModel}]
         include: [{model: CategoryModel}],
         limit: 5
     }).then((articles) => {
-        response.render("admin/articles/index", { articles: articles })
         Article.count().then((count) => {
             response.render("admin/articles/index", { articles: articles, count: count })
         })
     })
 })
 
-router.get("/admin/articles/new", (request, response) => {
+router.get("/admin/articles/new", adminAuth, (request, response) => {
     CategoryModel.findAll().then((categories) => {
         response.render("admin/articles/new", { categories: categories })
     })
 })
 
-router.get("/admin/article/edit/:id", (request, response) => {
+router.get("/admin/article/edit/:id", adminAuth, (request, response) => {
     var id = request.params.id
     if (isNaN(id)) {
         response.render("/admin/articles")
@@ -42,7 +41,7 @@ router.get("/admin/article/edit/:id", (request, response) => {
     })
 })
 
-router.post("/articles/save", (request, response) => {
+router.post("/articles/save", adminAuth, (request, response) => {
     var title = request.body.title
     var body = request.body.body
     var category = request.body.category
@@ -57,7 +56,7 @@ router.post("/articles/save", (request, response) => {
     })
 })
 
-router.post("/article/update", (request, response) => {
+router.post("/article/update", adminAuth, (request, response) => {
     var id = request.body.id
     var title = request.body.title
     var body = request.body.body
@@ -77,7 +76,7 @@ router.post("/article/update", (request, response) => {
     })
 })
 
-router.post("/articles/delete", (request, response) => {
+router.post("/articles/delete", adminAuth, (request, response) => {
     var id = request.body.id
     if (id) {
         Article.destroy({

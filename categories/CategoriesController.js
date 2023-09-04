@@ -3,11 +3,12 @@ const router = express.Router()
 const Category = require("./Category")
 const slugify = require("slugify")
 const Article = require("../articles/Article")
+const adminAuth = require("../middlewares/adminAuth")
 
 var msg = null
 var msgErr = null
 
-router.get("/admin/categories", (request, response) => {
+router.get("/admin/categories", adminAuth, (request, response) => {
     Category.findAll({limit: 5}).then((categories) =>{
         Category.count().then((count)=> {
             response.render("admin/categories/index", {
@@ -22,11 +23,11 @@ router.get("/admin/categories", (request, response) => {
     })
 })
 
-router.get("/admin/categories/new", (request, response) => {
+router.get("/admin/categories/new", adminAuth, (request, response) => {
     response.render("admin/categories/new")
 })
 
-router.get("/admin/categories/edit/:id", (request, response) => {
+router.get("/admin/categories/edit/:id", adminAuth, (request, response) => {
     var id = request.params.id
     if (isNaN(id)) {
         response.render("/admin/categories")
@@ -42,7 +43,7 @@ router.get("/admin/categories/edit/:id", (request, response) => {
     })
 })
 
-router.post("/categories/save", (request, response) => {
+router.post("/categories/save", adminAuth, (request, response) => {
     var title = request.body.title
 
     if (title != undefined && title != null) {
@@ -55,7 +56,7 @@ router.post("/categories/save", (request, response) => {
     }
 })
 
-router.post("/categories/delete", async (request, response) => {
+router.post("/categories/delete", adminAuth, async (request, response) => {
     var id = request.body.id
 
     const relatedArticles = await Article.findOne({
@@ -127,9 +128,6 @@ router.get("/categories/page/:num", (request, response) => {
 
         response.render("admin/categories/page", {result: result, categories: categories})
     })
-
-
-
 })
 
 
