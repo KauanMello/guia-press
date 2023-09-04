@@ -1,0 +1,82 @@
+<%- include("../../partials/header.ejs") %>
+<div class="container">
+
+    <br>
+    <div>
+        <h2>Artigos </h2>
+        <a href="/admin/articles/new" class="btn btn-success">
+            Novo
+        </a>
+    </div>
+    <br>
+
+    <div class="container">
+        <div>
+            <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Id</th>
+                            <th>Título</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% result.articles.rows.forEach((article) => { %>
+                            <tr>
+                                <td><%= article.id %></td>
+                                <td><%= article.title %></td>
+
+                                <td>
+                                    <a href="/admin/article/edit/<%= article.id %>" class="btn btn-warning ">Editar</a>
+
+                                    <form method="POST" action="/articles/delete" class="d-inline" onsubmit="confirmarExclusao(event, this)">
+                                        <input name="id" type="hidden" value="<%= article.id %>" >
+                                        <button type="submit" class="btn btn-danger">Excluir</button>
+                                    </form>
+                                </td>
+
+                            </tr>
+                        <% })%>
+                    </tbody>
+                </table>
+
+            <div class="row">
+                <div class="col col-12">
+
+                    <%if(result.next) { %>
+                        <a href="/articles/page/<%= result.page + 1 %>"  class="btn btn-dark" style="float: right">
+                            >
+                        </a>
+                    <% } %>
+
+                    <% if(result.page > 2) { %>
+                        <a href="/articles/page/<%= result.page - 1 %>" class="btn btn-dark" style="float: left">
+                            <
+                        </a>
+                    <% } else if(result.page == 2 ) { %>
+                        <a href="/admin/articles" class="btn btn-dark" style="float: left">
+                            <
+                        </a>
+                    <% } %>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+<%- include("../../partials/footer.ejs") %>
+<script>
+    function confirmarExclusao(event, form){
+        event.preventDefault()
+        var isOk = confirm("Tem certeza que deseja excluir a categoria selecionada?")
+        if(isOk){
+            form.submit()
+        }
+    }
+</script>
+

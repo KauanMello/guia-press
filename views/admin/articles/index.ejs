@@ -39,6 +39,13 @@
                 </tbody>
             </table>
     <% } %>
+
+    <%if(count > 5) { %>
+        <a href="/articles/page/2"  class="btn btn-dark" style="float: right">
+            >
+        </a>
+    <% } %>
+
 </div>
 
 <%- include("../../partials/footer.ejs") %>

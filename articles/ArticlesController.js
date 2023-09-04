@@ -7,8 +7,13 @@ const CategoryModel = require("../categories/Category")
 router.get("/admin/articles", (request, response) => {
     Article.findAll({
         include: [{model: CategoryModel}]
+        include: [{model: CategoryModel}],
+        limit: 5
     }).then((articles) => {
         response.render("admin/articles/index", { articles: articles })
+        Article.count().then((count) => {
+            response.render("admin/articles/index", { articles: articles, count: count })
+        })
     })
 })
 
